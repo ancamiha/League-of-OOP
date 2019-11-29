@@ -55,7 +55,7 @@ public final class GameInputLoader {
                         heroes.add(new Rogue(HeroType.Rogue, fs.nextInt(), fs.nextInt()));
                         break;
                     default:
-                        System.out.println("invalid type of hero");
+                        System.out.println("invalid type of player");
                 }
             }
 

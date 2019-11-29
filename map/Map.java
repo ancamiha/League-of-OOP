@@ -6,10 +6,7 @@ import java.util.List;
  * Singleton class.
  */
 public final class Map {
-    private TypeOfField[][] map;
-
     private static Map instance;
-
     private Map() {
 
     }
@@ -20,7 +17,8 @@ public final class Map {
         return instance;
     }
 
-    public static void makeMap(final int linesN, final int lengthM, final List<String> fields) {
+    public static TypeOfField[][] makeMap(final int linesN, final int lengthM,
+                                          final List<String> fields) {
         TypeOfField[][] map  = new TypeOfField[linesN][lengthM];
         for (int i = 0; i < linesN; i++) {
             for (int j = 0; j < lengthM; j++) {
@@ -32,15 +30,20 @@ public final class Map {
                        map[i][j] = TypeOfField.Volcanic;
                        break;
                    case 'D':
-                       map[i][j] = TypeOfField.Dessert;
+                       map[i][j] = TypeOfField.Desert;
                        break;
                    case 'W':
                        map[i][j] = TypeOfField.Woods;
                        break;
                    default:
-                       System.out.println("invalid character");
+                       System.out.println("invalid type of land");
                }
             }
         }
+        return map;
+    }
+
+    public static TypeOfField getFieldType(final TypeOfField[][] map, final int x, final int y) {
+        return map[x][y];
     }
 }

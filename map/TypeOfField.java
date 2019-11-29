@@ -1,3 +1,3 @@
 package map;
 
-public enum TypeOfField { Land, Volcanic, Dessert, Woods }
+public enum TypeOfField { Land, Volcanic, Desert, Woods }
