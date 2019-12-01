@@ -6,7 +6,7 @@ import map.TypeOfField;
 public class RogueAbilities extends Abilities {
     @Override
     public final float getRaceModifierFirst(final Hero enemy) {
-        final float rogueModifier = 1.20f;
+        final float rogueModifier = 1.2f;
         final float knightModifier = 0.9f;
         final float pyromancerModifier = 1.25f;
         final float wizardModifier = 1.25f;
@@ -46,50 +46,55 @@ public class RogueAbilities extends Abilities {
 
     //backstab
     @Override
-    public final int firstAbility(final Hero hero, final Hero enemy) {
+    public final float firstAbility(final Hero hero, final Hero enemy) {
         final int baseDamage = 200;
         final int levelDamage = 20;
-        final float bonusOnWoods = 1.5f;
+        final float criticalHit = 1.5f;
         final int overtimeRoundsWoods = 3;
-        int damage = 0;
+        float damage;
         if ((hero.getField()).equals(TypeOfField.Woods)) {
-            if (hero.nrOfRounds == overtimeRoundsWoods) {
-                damage = Math.round(Math.round((baseDamage + hero.getLevel() * levelDamage)
-                        * this.landAmplifRogue * bonusOnWoods) * getRaceModifierFirst(enemy));
+            if (hero.getCounterR() == overtimeRoundsWoods || hero.getCounterR() == 0) {
+                damage = (baseDamage + hero.getLevel() * levelDamage)
+                        * landAmplifRogue * criticalHit;
             } else {
-                damage = Math.round(Math.round((baseDamage + hero.getLevel() * levelDamage)
-                        * this.landAmplifRogue) * getRaceModifierFirst(enemy));
+                damage = (baseDamage + hero.getLevel() * levelDamage) * landAmplifRogue;
             }
         } else {
-            damage = Math.round(Math.round(baseDamage + hero.getLevel() * levelDamage)
-                    * getRaceModifierFirst(enemy));
+            damage = baseDamage + hero.getLevel() * levelDamage;
         }
-        hero.nrOfRounds++;
+        hero.updateCounterR();
         return damage;
     }
 
     //paralysis
     @Override
-    public final int secondAbility(final Hero hero, final Hero enemy) {
+    public final float secondAbility(final Hero hero, final Hero enemy) {
         final int baseDamage = 40;
         final int levelDamage = 10;
-        final int overtimeRounds = 3;
-        final int overtimeRoundsWoods = 6;
-        int damage = 0;
+        final int time = 3;
+        final int timeOnWoods = 6;
+        int damage;
         if ((hero.getField()).equals(TypeOfField.Woods)) {
-            damage = Math.round(Math.round((baseDamage + hero.getLevel() * levelDamage)
-                    * this.landAmplifRogue) * getRaceModifierFirst(enemy));
-            enemy.overTimeAbilities(overtimeRoundsWoods, damage, true);
+            damage = Math.round((baseDamage + hero.getLevel() * levelDamage) * landAmplifRogue);
+            enemy.overTimeAbilities(timeOnWoods, Math.round(damage
+                                   * getRaceModifierSecond(enemy)), true, 1);
         } else {
-            damage = Math.round(Math.round(baseDamage + hero.getLevel() * levelDamage)
-                    * getRaceModifierFirst(enemy));
-            enemy.overTimeAbilities(overtimeRounds, damage, true);
+            damage = Math.round(baseDamage + hero.getLevel() * levelDamage);
+            enemy.overTimeAbilities(time, Math.round(damage
+                                   * getRaceModifierSecond(enemy)), true, 1);
         }
-        return 0;
+        return damage;
     }
 
     @Override
     public final int getDamage(final Hero hero, final Hero enemy) {
+        return Math.round(firstAbility(hero, enemy) * getRaceModifierFirst(enemy))
+                + Math.round(secondAbility(hero, enemy) * getRaceModifierSecond(enemy));
+    }
+
+    @Override
+    public final float getDamageWithoutM(final Hero hero, final Hero enemy) {
+        hero.decreaseCounterR();
         return firstAbility(hero, enemy) + secondAbility(hero, enemy);
     }
 }

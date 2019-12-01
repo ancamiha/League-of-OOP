@@ -47,32 +47,54 @@ public class PyromancerAbilities extends Abilities {
 
     //fireblast
     @Override
-    public final int firstAbility(final Hero hero, final Hero enemy) {
-        final int baseDamage = 300;
+    public final float firstAbility(final Hero hero, final Hero enemy) {
+        final int baseDamage = 350;
         final int levelDamage = 50;
-        int damage = 0;
+        int damage;
         if ((hero.getField()).equals(TypeOfField.Volcanic)) {
-            damage = Math.round(Math.round((baseDamage + hero.getLevel() * levelDamage)
-                    * this.landAmplifPyromancer) * getRaceModifierFirst(enemy));
+            damage = Math.round((baseDamage + hero.getLevel() * levelDamage)
+                    * landAmplifPyromancer);
         } else {
-            damage = Math.round(Math.round(baseDamage + hero.getLevel() * levelDamage)
-                    * getRaceModifierFirst(enemy));
+            damage = Math.round(baseDamage + hero.getLevel() * levelDamage);
         }
         return damage;
     }
 
     //ignite
     @Override
-    public final int secondAbility(final Hero hero, final Hero enemy) {
+    public final float secondAbility(final Hero hero, final Hero enemy) {
         final int thisRoundBaseDamage = 150;
         final int thisRoundLevelDamage = 20;
         final int baseDamage = 50;
         final int levelDamage = 30;
-        return 0;
+        final int time = 2;
+        int damage;
+        if ((hero.getField()).equals(TypeOfField.Volcanic)) {
+            damage = Math.round((thisRoundBaseDamage + hero.getLevel()
+                               * thisRoundLevelDamage) * landAmplifPyromancer);
+            int afterDamage;
+            afterDamage = Math.round((baseDamage + hero.getLevel() * levelDamage)
+                                    * landAmplifPyromancer);
+            enemy.overTimeAbilities(time, Math.round(afterDamage
+                                   * getRaceModifierSecond(enemy)), true, 0);
+        } else {
+            damage = Math.round(thisRoundBaseDamage + hero.getLevel() * thisRoundLevelDamage);
+            int afterDamage;
+            afterDamage = Math.round(baseDamage + hero.getLevel() * levelDamage);
+            enemy.overTimeAbilities(time, Math.round(afterDamage
+                    * getRaceModifierSecond(enemy)), true, 0);
+        }
+        return damage;
     }
 
     @Override
     public final int getDamage(final Hero hero, final Hero enemy) {
+        return Math.round(firstAbility(hero, enemy) * getRaceModifierFirst(enemy))
+                + Math.round(secondAbility(hero, enemy) * getRaceModifierSecond(enemy));
+    }
+
+    @Override
+    public final float getDamageWithoutM(final Hero hero, final Hero enemy) {
         return firstAbility(hero, enemy) + secondAbility(hero, enemy);
     }
 }

@@ -4,7 +4,6 @@ import abilities.Abilities;
 import abilities.PyromancerAbilities;
 
 public class Pyromancer extends Hero {
-    //public final float landAmplif = 1.25f;
     public Pyromancer(final HeroType type, final int initPx, final int initPy) {
         super(type, initPx, initPy);
     }
@@ -21,15 +20,16 @@ public class Pyromancer extends Hero {
      */
     @Override
     public final void accept(final Hero hero) {
-        this.interactWith(hero);
+        hero.interactWith(this);
     }
 
     @Override
     public final void interactWith(final Hero enemy) {
         Abilities abilities = new PyromancerAbilities();
-        int damage = abilities.firstAbility(this, enemy)
-                + abilities.secondAbility(this, enemy);
-        //System.out.println("damage = " + damage);
+        if ((enemy.getType()).equals(HeroType.Wizard)) {
+            ((Wizard) enemy).setDamageReceived(abilities.getDamageWithoutM(this, enemy));
+        }
+        int damage = abilities.getDamage(this, enemy);
         enemy.updateHp(damage);
     }
 }

@@ -47,33 +47,52 @@ public class KnightAbilities extends Abilities {
 
     //execute
     @Override
-    public final int firstAbility(final Hero hero, final Hero enemy) {
+    public final float firstAbility(final Hero hero, final Hero enemy) {
         final int baseDamage = 200;
         final int levelDamage = 30;
-        final float limitHP = 0.2f;
+        final float proc = 0.2f;
         final float levelLimitHP = 0.01f;
         final float maxLimitHP = 0.4f;
-        int damage = 0;
+        int damage;
+        float hpLimit = proc * enemy.getValueOfHp() + levelLimitHP * enemy.getLevel();
+        if (hpLimit > maxLimitHP) {
+            hpLimit = maxLimitHP;
+        }
+        if (enemy.getHp() < hpLimit) {
+            return enemy.getHp();
+        }
         if ((hero.getField()).equals(TypeOfField.Land)) {
-            damage = Math.round(Math.round((baseDamage + hero.getLevel() * levelDamage)
-                    * this.landAmplifKnight) * getRaceModifierFirst(enemy));
+            damage = Math.round((baseDamage + hero.getLevel() * levelDamage) * landAmplifKnight);
         } else {
-            damage = Math.round(Math.round(baseDamage + hero.getLevel() * levelDamage)
-                    * getRaceModifierFirst(enemy));
+            damage = Math.round(baseDamage + hero.getLevel() * levelDamage);
         }
         return damage;
     }
 
     //slam
     @Override
-    public final int secondAbility(final Hero hero, final Hero enemy) {
+    public final float secondAbility(final Hero hero, final Hero enemy) {
         final int baseDamage = 100;
         final int levelDamage = 40;
-        return 0;
+        int damage;
+        if ((hero.getField()).equals(TypeOfField.Land)) {
+            damage = Math.round((baseDamage + hero.getLevel() * levelDamage) * landAmplifKnight);
+            enemy.overTimeAbilities(0, 0, false, 1);
+        } else {
+            damage = Math.round(baseDamage + hero.getLevel() * levelDamage);
+            enemy.overTimeAbilities(0, 0, false, 1);
+        }
+        return damage;
     }
 
     @Override
     public final int getDamage(final Hero hero, final Hero enemy) {
+        return Math.round(firstAbility(hero, enemy) * getRaceModifierFirst(enemy))
+                + Math.round(secondAbility(hero, enemy) * getRaceModifierSecond(enemy));
+    }
+
+    @Override
+    public final float getDamageWithoutM(final Hero hero, final Hero enemy) {
         return firstAbility(hero, enemy) + secondAbility(hero, enemy);
     }
 }

@@ -4,7 +4,6 @@ import abilities.Abilities;
 import abilities.RogueAbilities;
 
 public class Rogue extends Hero {
-    //private final float landAmplif = 1.15f;
     public Rogue(final HeroType type, final int initPx, final int initPy) {
         super(type, initPx, initPy);
     }
@@ -21,14 +20,16 @@ public class Rogue extends Hero {
      */
     @Override
     public final void accept(final Hero hero) {
-        this.interactWith(hero);
+        hero.interactWith(this);
     }
 
     @Override
     public final void interactWith(final Hero enemy) {
         Abilities abilities = new RogueAbilities();
         int damage = abilities.getDamage(this, enemy);
-        //System.out.println("damage = " + damage);
+        if ((enemy.getType()).equals(HeroType.Wizard)) {
+            ((Wizard) enemy).setDamageReceived(abilities.getDamageWithoutM(this, enemy));
+        }
         enemy.updateHp(damage);
     }
 }

@@ -4,9 +4,10 @@ import abilities.Abilities;
 import abilities.WizardAbilities;
 
 public class Wizard extends Hero {
-    //private final float landAmplif = 1.1f;
+    private float damageReceived;
     public Wizard(final HeroType type, final int initPx, final int initPy) {
         super(type, initPx, initPy);
+        damageReceived = 0;
     }
 
     @Override
@@ -16,20 +17,31 @@ public class Wizard extends Hero {
         return initHP + levelHp * this.getLevel();
     }
 
+    public final void setDamageReceived(final float damage) {
+        this.damageReceived = damage;
+    }
+    public final float getDamageReceived() {
+        return damageReceived;
+    }
+    public final void updateDamageReceived(final float damage) {
+        this.damageReceived += damage;
+    }
+
     /**
      * Implement Visitor pattern.
      */
     @Override
     public final void accept(final Hero hero) {
-        this.interactWith(hero);
+        hero.interactWith(this);
     }
 
     @Override
     public final void interactWith(final Hero enemy) {
         Abilities abilities = new WizardAbilities();
-        int damage = abilities.firstAbility(this, enemy)
-                + abilities.secondAbility(this, enemy);
-        //System.out.println("damage = " + damage);
+        if ((enemy.getType()).equals(HeroType.Wizard)) {
+            ((Wizard) enemy).setDamageReceived(abilities.getDamageWithoutM(this, enemy));
+        }
+        int damage = abilities.getDamage(this, enemy);
         enemy.updateHp(damage);
     }
 }

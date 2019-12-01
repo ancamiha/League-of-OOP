@@ -2,6 +2,7 @@ package abilities;
 
 import heroes.Hero;
 import heroes.HeroType;
+import heroes.Wizard;
 import map.TypeOfField;
 
 public class WizardAbilities extends Abilities {
@@ -48,39 +49,54 @@ public class WizardAbilities extends Abilities {
 
     //drain
     @Override
-    public final int firstAbility(final Hero hero, final Hero enemy) {
+    public final float firstAbility(final Hero hero, final Hero enemy) {
         final float baseDamage = 0.2f;
         final float levelDamage = 0.05f;
         final float minHP = 0.3f;
-        int damage = 0;
+        float damage;
+        float proc = baseDamage + enemy.getLevel() * levelDamage;
+        float result = Float.min(minHP * enemy.getValueOfHp(), enemy.getHp());
         if ((hero.getField()).equals(TypeOfField.Desert)) {
-            float percent = baseDamage + enemy.getLevel() * levelDamage;
-            float result = Float.min(minHP * enemy.getValueOfHp(), enemy.getHp());
-            result *= getRaceModifierFirst(enemy) * percent * landAmplifWizard;
-            damage = Math.round(result);
+            result *= proc * landAmplifWizard;
+            damage = result;
         } else {
-            float percent = baseDamage + enemy.getLevel() * levelDamage;
-            float result = Float.min(minHP * enemy.getValueOfHp(), enemy.getHp());
-            result *= getRaceModifierSecond(enemy) * percent;
-            damage = Math.round(result);
+            result *= proc;
+            damage = result;
         }
         return damage;
     }
 
     //deflect
     @Override
-    public final int secondAbility(final Hero hero, final Hero enemy) {
+    public final float secondAbility(final Hero hero, final Hero enemy) {
         final float baseDamage = 0.35f;
         final float levelDamage = 0.02f;
-        final float maxHP = 0.7f;
+        final float maxProc = 0.7f;
+        float damageReceived = ((Wizard) hero).getDamageReceived();
+        float damage;
         if ((enemy.getType()).equals(HeroType.Wizard)) {
             return 0;
         }
-        return 0;
+        float proc = baseDamage + hero.getLevel() * levelDamage;
+        if (proc > maxProc) {
+            proc = maxProc;
+        }
+        if ((hero.getField()).equals(TypeOfField.Desert)) {
+            damage = proc * damageReceived * landAmplifWizard;
+        } else {
+            damage = proc * damageReceived;
+        }
+        return damage;
     }
 
     @Override
     public final int getDamage(final Hero hero, final Hero enemy) {
+        return Math.round(firstAbility(hero, enemy) * getRaceModifierFirst(enemy))
+                + Math.round(secondAbility(hero, enemy) * getRaceModifierSecond(enemy));
+    }
+
+    @Override
+    public final float getDamageWithoutM(final Hero hero, final Hero enemy) {
         return firstAbility(hero, enemy) + secondAbility(hero, enemy);
     }
 }

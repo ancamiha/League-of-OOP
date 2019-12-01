@@ -1,9 +1,10 @@
 package main;
 
 import heroes.Hero;
+import heroes.HeroType;
+import heroes.PrintResult;
 import map.Map;
 import map.TypeOfField;
-
 import java.util.List;
 
 public final class Main {
@@ -18,39 +19,56 @@ public final class Main {
                                           gameInput.getFields());
 
         List<Hero> heroes = gameInput.getHeroes();
-        System.out.println(heroes);
         for (int i = 0; i < gameInput.getRounds(); i++) {
+            //set the field type for every hero
+            for (Hero hero : heroes) {
+                hero.setField(Map.getFieldType(map, hero.getPosX(), hero.getPosY()));
+            }
+            //verify if the have overtime damage to get
             for (int j = 0; j < heroes.size(); j++) {
                 Hero hero = heroes.get(j);
-                hero.moveHero(gameInput.getrDescription().get(i).charAt(j));
-                hero.setField(Map.getFieldType(map, hero.getPosX(), hero.getPosY()));
-//                System.out.println(hero.getOvertimeRouds());
-//                System.out.println(hero.getStillApply());
                 if (hero.getStillApply()) {
-                    //System.out.println("se intra");
                     hero.updateHp(hero.getDamage());
-                    hero.updateOvertimeRounds();
-                    if (hero.getOvertimeRouds() == 0) {
+                    hero.updateTime();
+                    if (hero.getTime() == 0) {
                         hero.updateStillApply();
                     }
                 }
+                hero.moveHero(gameInput.getrDescription().get(i).charAt(j));
+                hero.setField(Map.getFieldType(map, hero.getPosX(), hero.getPosY()));
             }
+            //the fight
             for (int j = 0; j < heroes.size(); j++) {
                 for (int k = j + 1; k < heroes.size(); k++) {
-                    if (heroes.get(j).getPosX() == heroes.get(k).getPosX()
-                        && heroes.get(j).getPosY() == heroes.get(k).getPosY()
-                        && heroes.get(j).notDead() && heroes.get(k).notDead()) {
-                        (heroes.get(j)).accept(heroes.get(k));
-                        (heroes.get(k)).accept(heroes.get(j));
+                    Hero hero1 = heroes.get(j);
+                    Hero hero2 = heroes.get(k);
+                    if (hero1.getPosX() == hero2.getPosX()
+                        && hero1.getPosY() == hero2.getPosY()
+                        && hero1.isNotDead() && hero2.isNotDead()) {
+                        /*pentru aflarea valorii de damageReceived, jucatorul de tip Wizard
+                        * trebuie sa fie primul atacat*/
+                        if ((hero2.getType()).equals(HeroType.Wizard)) {
+                            (hero2).accept(hero1);
+                            (hero1).accept(hero2);
+                        } else {
+                            (hero1).accept(hero2);
+                            (hero2).accept(hero1);
+                        }
+
+                        if (!hero2.isNotDead()) {
+                            hero1.increaseXP(hero2);
+                        }
+                        if (!hero1.isNotDead()) {
+                            hero2.increaseXP(hero1);
+                        }
                     }
                 }
             }
-            Hero.printR(heroes);
+            PrintResult.printR(heroes);
             System.out.println();
         }
-
-        Hero.printR(heroes);
-        Hero.printResult(heroes, args[1]);
+        PrintResult.printR(heroes);
+        PrintResult.print(heroes, args[1]);
     }
 }
 

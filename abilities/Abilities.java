@@ -10,7 +10,8 @@ public abstract class Abilities {
 
     public abstract float getRaceModifierFirst(Hero enemy);
     public abstract float getRaceModifierSecond(Hero enemy);
-    public abstract int firstAbility(Hero hero, Hero enemy);
-    public abstract int secondAbility(Hero hero, Hero enemy);
+    public abstract float firstAbility(Hero hero, Hero enemy);
+    public abstract float secondAbility(Hero hero, Hero enemy);
     public abstract int getDamage(Hero hero, Hero enemy);
+    public abstract float getDamageWithoutM(Hero hero, Hero enemy);
 }
