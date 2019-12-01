@@ -20,11 +20,12 @@ public final class Main {
 
         List<Hero> heroes = gameInput.getHeroes();
         for (int i = 0; i < gameInput.getRounds(); i++) {
-            //set the field type for every hero
+            //se seteaza tipul locatiei pentru fiecare jucator
             for (Hero hero : heroes) {
                 hero.setField(Map.getFieldType(map, hero.getPosX(), hero.getPosY()));
             }
-            //verify if the have overtime damage to get
+            /*se verifica fiecare jucator pentru a se vedea daca trebuie sa primeasca
+            damage overtime*/
             for (int j = 0; j < heroes.size(); j++) {
                 Hero hero = heroes.get(j);
                 if (hero.getStillApply()) {
@@ -37,7 +38,7 @@ public final class Main {
                 hero.moveHero(gameInput.getrDescription().get(i).charAt(j));
                 hero.setField(Map.getFieldType(map, hero.getPosX(), hero.getPosY()));
             }
-            //the fight
+            //lupta
             for (int j = 0; j < heroes.size(); j++) {
                 for (int k = j + 1; k < heroes.size(); k++) {
                     Hero hero1 = heroes.get(j);
@@ -46,7 +47,7 @@ public final class Main {
                         && hero1.getPosY() == hero2.getPosY()
                         && hero1.isNotDead() && hero2.isNotDead()) {
                         /*pentru aflarea valorii de damageReceived, jucatorul de tip Wizard
-                        * trebuie sa fie primul atacat*/
+                        trebuie sa fie primul atacat*/
                         if ((hero2.getType()).equals(HeroType.Wizard)) {
                             (hero2).accept(hero1);
                             (hero1).accept(hero2);
@@ -64,10 +65,7 @@ public final class Main {
                     }
                 }
             }
-            PrintResult.printR(heroes);
-            System.out.println();
         }
-        PrintResult.printR(heroes);
         PrintResult.print(heroes, args[1]);
     }
 }

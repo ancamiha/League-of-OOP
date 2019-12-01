@@ -31,6 +31,10 @@ public abstract class Hero {
         this.counterR = 0;
     }
 
+    /**
+     * Calculeaza Hp-ul maxim a eroului in functie de baseDamage si levelDamage.
+     * @return valoarea maxima a hp-ului
+     */
     public abstract int getValueOfHp();
     public final int getXp() {
         return xp;
@@ -58,9 +62,6 @@ public abstract class Hero {
     }
     public final void setField(final TypeOfField currentField) {
         this.field = currentField;
-    }
-    public final void setLevel(final int level) {
-        this.level = level;
     }
 
     public final void updatePosX(final int newX) {
