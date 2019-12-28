@@ -65,7 +65,10 @@ public final class Main {
                     }
                 }
             }
+            PrintResult.printR(heroes);
+            System.out.println();
         }
+        PrintResult.printR(heroes);
         PrintResult.print(heroes, args[1]);
     }
 }

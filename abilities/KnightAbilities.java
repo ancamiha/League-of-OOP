@@ -58,7 +58,7 @@ public class KnightAbilities extends Abilities {
         if (hpLimit > maxLimitHP) {
             hpLimit = maxLimitHP;
         }
-        if (enemy.getHp() < hpLimit) {
+        if (enemy.getHp() <= hpLimit) {
             return enemy.getHp();
         }
         if ((hero.getField()).equals(TypeOfField.Land)) {

@@ -5,14 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import fileio.FileSystem;
-import heroes.HeroType;
+import heroes.HeroesFactory;
 import heroes.Hero;
-import heroes.Pyromancer;
-import heroes.Knight;
-import heroes.Wizard;
-import heroes.Rogue;
 
-public final class GameInputLoader {
+final class GameInputLoader {
     private final String mInputPath;
     private final String mOutputPath;
 
@@ -21,7 +17,7 @@ public final class GameInputLoader {
         mOutputPath = outputPath;
     }
 
-    public GameInput load() {
+    GameInput load() {
         List<String> fields = new ArrayList<>();
         List<Hero> heroes = new LinkedList<>();
         List<String> rDescription = new ArrayList<>();
@@ -41,22 +37,8 @@ public final class GameInputLoader {
 
             nrP = fs.nextInt();
             for (int i = 0; i < nrP; ++i) {
-                switch (fs.nextWord()) {
-                    case "P":
-                        heroes.add(new Pyromancer(HeroType.Pyromancer, fs.nextInt(), fs.nextInt()));
-                        break;
-                    case "K":
-                        heroes.add(new Knight(HeroType.Knight, fs.nextInt(), fs.nextInt()));
-                        break;
-                    case "W":
-                        heroes.add(new Wizard(HeroType.Wizard, fs.nextInt(), fs.nextInt()));
-                        break;
-                    case "R":
-                        heroes.add(new Rogue(HeroType.Rogue, fs.nextInt(), fs.nextInt()));
-                        break;
-                    default:
-                        System.out.println("invalid type of player");
-                }
+                HeroesFactory.getInstance().createHeroes(heroes, fs.nextWord(),
+                                                    fs.nextInt(), fs.nextInt());
             }
 
             rounds = fs.nextInt();
