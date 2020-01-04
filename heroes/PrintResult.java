@@ -48,12 +48,13 @@ public final class PrintResult {
         for (Hero hero : heroes) {
             if (!hero.isNotDead()) {
                 char c = hero.getType().toString().charAt(0);
-                System.out.println(c + " dead");
+                System.out.println(hero.getId() + " " + c + " dead");
             }
             if (hero.isNotDead()) {
                 char c = hero.getType().toString().charAt(0);
-                System.out.println(c + " " + hero.getLevel() + " " + hero.getXp() + " "
-                        + hero.getHp() + " " + hero.getPosX() + " " + hero.getPosY());
+                System.out.println(hero.getId() + " " + c + " " + hero.getLevel() + " "
+                        + hero.getXp() + " " + hero.getHp() + " " + hero.getPosX() + " "
+                        + hero.getPosY());
             }
         }
     }

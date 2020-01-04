@@ -13,13 +13,13 @@ public abstract class Abilities {
      * @param enemy victima
      * @return valoarea modificatorului de rasa
      */
-    public abstract float getRaceModifierFirst(Hero enemy);
+    public abstract float getRaceModifierFirst(Hero enemy, float bonus);
     /**
      * Determina modificatorul de rasa specific celei de a doua abilitati.
      * @param enemy victima
      * @return valoarea modificatorului de rasa
      */
-    public abstract float getRaceModifierSecond(Hero enemy);
+    public abstract float getRaceModifierSecond(Hero enemy, float bonus);
     /**
      * Contine implementarea primei abilitati.
      * @param hero eroul

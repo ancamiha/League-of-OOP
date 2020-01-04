@@ -2,10 +2,11 @@ package heroes;
 
 import abilities.Abilities;
 import abilities.RogueAbilities;
+import angels.Angels;
 
 public class Rogue extends Hero {
-    public Rogue(final HeroType type, final int initPx, final int initPy) {
-        super(type, initPx, initPy);
+    public Rogue(final int id, final HeroType type, final int posX, final int posY) {
+        super(id, type, posX, posY);
     }
 
     @Override
@@ -31,5 +32,13 @@ public class Rogue extends Hero {
             ((Wizard) enemy).setDamageReceived(abilities.getDamageWithoutM(this, enemy));
         }
         enemy.updateHp(damage);
+    }
+
+    /**
+     * Implement Visitor pattern angels-heroes.
+     */
+    @Override
+    public void acceptAngel(final Angels angel) {
+        angel.actionOn(this);
     }
 }

@@ -2,10 +2,11 @@ package heroes;
 
 import abilities.Abilities;
 import abilities.PyromancerAbilities;
+import angels.Angels;
 
 public class Pyromancer extends Hero {
-    public Pyromancer(final HeroType type, final int initPx, final int initPy) {
-        super(type, initPx, initPy);
+    public Pyromancer(final int id, final HeroType type, final int posX, final int posY) {
+        super(id, type, posX, posY);
     }
 
     @Override
@@ -31,5 +32,13 @@ public class Pyromancer extends Hero {
         }
         int damage = abilities.getDamage(this, enemy);
         enemy.updateHp(damage);
+    }
+
+    /**
+     * Implement Visitor pattern angels-heroes.
+     */
+    @Override
+    public void acceptAngel(final Angels angel) {
+        angel.actionOn(this);
     }
 }

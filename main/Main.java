@@ -1,5 +1,6 @@
 package main;
 
+import angels.Angels;
 import heroes.Hero;
 import heroes.HeroType;
 import heroes.PrintResult;
@@ -19,7 +20,10 @@ public final class Main {
                                           gameInput.getFields());
 
         List<Hero> heroes = gameInput.getHeroes();
+        List<Angels> angels = gameInput.getAngels();
+
         for (int i = 0; i < gameInput.getRounds(); i++) {
+            System.out.println("~~ Round " + i + " ~~");
             //se seteaza tipul locatiei pentru fiecare jucator
             for (Hero hero : heroes) {
                 hero.setField(Map.getFieldType(map, hero.getPosX(), hero.getPosY()));
@@ -37,6 +41,9 @@ public final class Main {
                 }
                 hero.moveHero(gameInput.getrDescription().get(i).charAt(j));
                 hero.setField(Map.getFieldType(map, hero.getPosX(), hero.getPosY()));
+            }
+            for (Hero hero : heroes) {
+                hero.chooseStrategy();
             }
             //lupta
             for (int j = 0; j < heroes.size(); j++) {
@@ -57,9 +64,11 @@ public final class Main {
                         }
 
                         if (!hero2.isNotDead()) {
+                            hero2.setDead(true);
                             hero1.increaseXP(hero2);
                         }
                         if (!hero1.isNotDead()) {
+                            hero1.setDead(true);
                             hero2.increaseXP(hero1);
                         }
                     }
@@ -68,6 +77,7 @@ public final class Main {
             PrintResult.printR(heroes);
             System.out.println();
         }
+        System.out.println("~~ Results ~~");
         PrintResult.printR(heroes);
         PrintResult.print(heroes, args[1]);
     }

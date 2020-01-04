@@ -17,20 +17,20 @@ public final class HeroesFactory {
         return instance;
     }
 
-    public void createHeroes(final List<Hero> heroes, final String hero, final int xPos,
-                             final int yPos) {
+    public void createHeroes(final int id, final List<Hero> heroes, final String hero,
+                             final int xPos, final int yPos) {
         switch (hero) {
             case "P":
-                heroes.add(new Pyromancer(HeroType.Pyromancer, xPos, yPos));
+                heroes.add(new Pyromancer(id, HeroType.Pyromancer, xPos, yPos));
                 break;
             case "K":
-                heroes.add(new Knight(HeroType.Knight, xPos, yPos));
+                heroes.add(new Knight(id, HeroType.Knight, xPos, yPos));
                 break;
             case "W":
-                heroes.add(new Wizard(HeroType.Wizard, xPos, yPos));
+                heroes.add(new Wizard(id, HeroType.Wizard, xPos, yPos));
                 break;
             case "R":
-                heroes.add(new Rogue(HeroType.Rogue, xPos, yPos));
+                heroes.add(new Rogue(id, HeroType.Rogue, xPos, yPos));
                 break;
             default:
                 System.out.println("invalid type of player");

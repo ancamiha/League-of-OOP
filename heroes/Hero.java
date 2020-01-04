@@ -1,10 +1,12 @@
 package heroes;
 
+import angels.Angels;
 import map.TypeOfField;
 
 import static java.lang.Integer.max;
 
 public abstract class Hero {
+    private int id;
     private final HeroType type;
     private int posX;
     private int posY;
@@ -13,13 +15,17 @@ public abstract class Hero {
     private int hp;
     private TypeOfField field;
     private int counterR;
+    private boolean isDead;
 
     private int time;
     private int damage;
     private boolean stillApply;
     private int dontMove;
 
-    public Hero(final HeroType type, final int posX, final int posY) {
+    private float bonus;
+
+    public Hero(final int id, final HeroType type, final int posX, final int posY) {
+        this.id = id;
         this.type = type;
         this.posX = posX;
         this.posY = posY;
@@ -29,6 +35,8 @@ public abstract class Hero {
         this.hp = this.getValueOfHp();
         this.field = TypeOfField.Land;
         this.counterR = 0;
+        this.bonus = 0;
+        this.isDead = false;
     }
 
     /**
@@ -60,8 +68,27 @@ public abstract class Hero {
     public final int getCounterR() {
         return counterR;
     }
+    public final int getId() {
+        return id;
+    }
+    public final float getBonus() {
+        return bonus;
+    }
+
     public final void setField(final TypeOfField currentField) {
         this.field = currentField;
+    }
+    public final void setHp(final int hp) {
+        this.hp = hp;
+    }
+    public final void setBonus(final float bonus) {
+        this.bonus = bonus;
+    }
+    public final void setDead(final boolean dead) {
+        isDead = dead;
+    }
+    public final void setXp(final int xp) {
+        this.xp = xp;
     }
 
     public final void updatePosX(final int newX) {
@@ -98,7 +125,7 @@ public abstract class Hero {
     /**
      * Creste in nivel personajul daca a depasit limita superiara a nivelului.
      */
-    private void levelUp() {
+    public void levelUp() {
         final int limit = 250;
         final int fifty = 50;
         int xpLevelUp = limit + this.getLevel() * fifty;
@@ -141,9 +168,10 @@ public abstract class Hero {
 
     @Override
     public final String toString() {
-        return "Hero{" + "type=" + type + ", posX=" + posX + ", posY=" + posY + ", level="
-                + level + ", xp=" + xp + ", hp=" + hp + ", field=" + field + '}';
+        return "Hero{" + "id=" + id + ", type=" + type + ", posX=" + posX + ", posY=" + posY
+                + ", level=" + level + ", xp=" + xp + ", hp=" + hp + ", field=" + field + '}';
     }
+
     public final void overTimeAbilities(final int rounds, final int overtimeDamage,
                                         final boolean apply, final int stay) {
         this.time = rounds;
@@ -173,9 +201,74 @@ public abstract class Hero {
     public final void updateDontMove() {
         this.dontMove--;
     }
+
+    /**
+     * Alegerea straategiei.
+     */
+    public final void chooseStrategy() {
+        final float two = 2f;
+        final float three = 3f;
+        final float four = 4f;
+        switch (this.getType()) {
+            case Knight:
+                if (((1f / three) * this.getValueOfHp()) < this.getHp()
+                    && this.getHp() < ((1f / two) * this.getValueOfHp())) {
+                    Strategy first = new FirstStrategy();
+                    first.updateCharacteristics(this);
+                }
+                if (this.getHp() < ((1f / three) * this.getValueOfHp())) {
+                    Strategy second = new SecondStrategy();
+                    second.updateCharacteristics(this);
+                }
+                break;
+            case Pyromancer:
+                if (((1f / four) * this.getValueOfHp()) < this.getHp()
+                        && this.getHp() < ((1f / three) * this.getValueOfHp())) {
+                    Strategy first = new FirstStrategy();
+                    first.updateCharacteristics(this);
+                }
+                if (this.getHp() < ((1f / four) * this.getValueOfHp())) {
+                    Strategy second = new SecondStrategy();
+                    second.updateCharacteristics(this);
+                }
+                break;
+            case Rogue:
+                final float five = 5f;
+                final float seven = 7f;
+                if (((1f / seven) * this.getValueOfHp()) < this.getHp()
+                        && this.getHp() < ((1f / five) * this.getValueOfHp())) {
+                    Strategy first = new FirstStrategy();
+                    first.updateCharacteristics(this);
+                }
+                if (this.getHp() < ((1f / seven) * this.getValueOfHp())) {
+                    Strategy second = new SecondStrategy();
+                    second.updateCharacteristics(this);
+                }
+                break;
+            case Wizard:
+                if (((1f / four) * this.getValueOfHp()) < this.getHp()
+                        && this.getHp() < ((1f / two) * this.getValueOfHp())) {
+                    Strategy first = new FirstStrategy();
+                    first.updateCharacteristics(this);
+                }
+                if (this.getHp() < ((1f / four) * this.getValueOfHp())) {
+                    Strategy second = new SecondStrategy();
+                    second.updateCharacteristics(this);
+                }
+                break;
+            default:
+                System.out.println("Invalid type");
+        }
+    }
+
     /**
      * Implement Visitor pattern.
      */
     public abstract void accept(Hero hero);
     public abstract void interactWith(Hero enemy);
+
+    /**
+     * Implement Visitor pattern angels-heroes.
+     */
+    public abstract void acceptAngel(Angels angel);
 }
