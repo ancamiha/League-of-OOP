@@ -8,14 +8,14 @@ public class KnightAbilities extends Abilities {
     @Override
     public final float getRaceModifierFirst(final Hero enemy, final float bonus) {
         final float rogueModifier = 1.15f;
-        final float knightModifier = 1f;
+        float knightModifier = 1f;
         final float pyromancerModifier = 1.1f;
         final float wizardModifier = 0.8f;
         switch (enemy.getType()) {
             case Rogue:
                 return rogueModifier + bonus;
             case Knight:
-                return knightModifier + bonus;
+                return knightModifier;
             case Pyromancer:
                 return pyromancerModifier + bonus;
             case Wizard:

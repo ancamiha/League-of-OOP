@@ -17,6 +17,7 @@ public class LevelUpAngel extends Angels {
         final int fifty = 50;
         final int xpLevelUp = limit + hero.getLevel() * fifty;
         final int xp = hero.getXp();
+        hero.setOldLvl(hero.getLevel());
         switch (hero.getType()) {
             case Knight:
                 final int xpK = xpLevelUp - xp;

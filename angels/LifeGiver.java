@@ -12,23 +12,39 @@ public class LifeGiver extends Angels {
      */
     @Override
     public void actionOn(final Hero hero) {
-        final int hp = hero.getHp();
+        int hp = hero.getHp();
         switch (hero.getType()) {
             case Knight:
                 final int hpK = 100;
-                hero.setHp(hp + hpK);
+                hp = hp + hpK;
+                if (hp > hero.getValueOfHp()) {
+                    hp = hero.getValueOfHp();
+                }
+                hero.setHp(hp);
                 break;
             case Pyromancer:
                 final int hpP = 80;
-                hero.setHp(hp + hpP);
+                hp = hp + hpP;
+                if (hp > hero.getValueOfHp()) {
+                    hp = hero.getValueOfHp();
+                }
+                hero.setHp(hp);
                 break;
             case Rogue:
                 final int hpR = 90;
-                hero.setHp(hp + hpR);
+                hp = hp + hpR;
+                if (hp > hero.getValueOfHp()) {
+                    hp = hero.getValueOfHp();
+                }
+                hero.setHp(hp);
                 break;
             case Wizard:
                 final int hpW = 120;
-                hero.setHp(hp + hpW);
+                hp = hp + hpW;
+                if (hp > hero.getValueOfHp()) {
+                    hp = hero.getValueOfHp();
+                }
+                hero.setHp(hp);
                 break;
             default:
                 System.out.println("Invalid type");

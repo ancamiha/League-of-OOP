@@ -2,7 +2,6 @@ package main;
 
 import angels.Angels;
 import heroes.Hero;
-
 import java.util.List;
 
 public class GameInput {

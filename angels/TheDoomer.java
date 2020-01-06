@@ -12,6 +12,9 @@ public class TheDoomer extends Angels {
      */
     @Override
     public void actionOn(final Hero hero) {
-        hero.setDead(true);
+        if (!hero.isDead()) {
+            hero.setDead(true);
+            hero.setKilledByAngel(true);
+        }
     }
 }

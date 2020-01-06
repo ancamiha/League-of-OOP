@@ -2,7 +2,6 @@ package heroes;
 
 import angels.Angels;
 import map.TypeOfField;
-
 import static java.lang.Integer.max;
 
 public abstract class Hero {
@@ -22,7 +21,13 @@ public abstract class Hero {
     private boolean stillApply;
     private int dontMove;
 
+    //pentru Observer
+    private boolean hasAppeared;
+    private boolean wasHit;
+    private boolean reachedLv;
     private float bonus;
+    private boolean killedByAngel;
+    private int oldLvl;
 
     public Hero(final int id, final HeroType type, final int posX, final int posY) {
         this.id = id;
@@ -37,6 +42,12 @@ public abstract class Hero {
         this.counterR = 0;
         this.bonus = 0;
         this.isDead = false;
+
+        this.killedByAngel = false;
+        this.hasAppeared = false;
+        this.wasHit = false;
+        this.reachedLv = false;
+        this.oldLvl = 0;
     }
 
     /**
@@ -74,6 +85,24 @@ public abstract class Hero {
     public final float getBonus() {
         return bonus;
     }
+    public final boolean isDead() {
+        return isDead;
+    }
+    public final boolean isKilledByAngel() {
+        return killedByAngel;
+    }
+    public final boolean isHasAppeared() {
+        return hasAppeared;
+    }
+    public final boolean isWasHit() {
+        return wasHit;
+    }
+    public final boolean isReachedLv() {
+        return reachedLv;
+    }
+    public final int getOldLvl() {
+        return oldLvl;
+    }
 
     public final void setField(final TypeOfField currentField) {
         this.field = currentField;
@@ -89,6 +118,21 @@ public abstract class Hero {
     }
     public final void setXp(final int xp) {
         this.xp = xp;
+    }
+    public final void setKilledByAngel(final boolean killedByAngel) {
+        this.killedByAngel = killedByAngel;
+    }
+    public final void setHasAppeared(final boolean hasAppeared) {
+        this.hasAppeared = hasAppeared;
+    }
+    public final void setWasHit(final boolean wasHit) {
+        this.wasHit = wasHit;
+    }
+    public final void setReachedLv(final boolean reachedLv) {
+        this.reachedLv = reachedLv;
+    }
+    public final void setOldLvl(final int oldLvl) {
+        this.oldLvl = oldLvl;
     }
 
     public final void updatePosX(final int newX) {
@@ -126,6 +170,7 @@ public abstract class Hero {
      * Creste in nivel personajul daca a depasit limita superiara a nivelului.
      */
     public void levelUp() {
+        this.setOldLvl(this.getLevel());
         final int limit = 250;
         final int fifty = 50;
         int xpLevelUp = limit + this.getLevel() * fifty;
@@ -133,6 +178,12 @@ public abstract class Hero {
             this.level++;
             this.hp = this.getValueOfHp();
             xpLevelUp = limit + this.getLevel() * fifty;
+        }
+        //se verifica daca eroul a crescut in level pentru Observer
+        if (this.getOldLvl() == this.getLevel()) {
+            this.setReachedLv(false);
+        } else {
+            this.setReachedLv(true);
         }
     }
 
@@ -203,7 +254,7 @@ public abstract class Hero {
     }
 
     /**
-     * Alegerea straategiei.
+     * Alegerea strategiei.
      */
     public final void chooseStrategy() {
         final float two = 2f;
