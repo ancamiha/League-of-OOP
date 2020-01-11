@@ -17,6 +17,14 @@ public final class HeroesFactory {
         return instance;
     }
 
+    /**
+     * Metoda ce creeaza eroii.
+     * @param id id-ul fiecarui erou
+     * @param heroes lista de eroi
+     * @param hero tipul eroului ce trebuie creat
+     * @param xPos coordonata x de pe harta
+     * @param yPos coordonata y de pe harta
+     */
     public void createHeroes(final int id, final List<Hero> heroes, final String hero,
                              final int xPos, final int yPos) {
         switch (hero) {

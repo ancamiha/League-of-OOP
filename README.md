@@ -1,5 +1,6 @@
 Enache Anca - Mihaela 324CD
 
+-----ETAPA 1-----
 Proiectul meu contine 4 package-uri: abilities, heroes, main si map.
 
 -package-ul main contine 3 clase
@@ -59,4 +60,33 @@ cu amplificatori de rasa.
     Metoda "getDamageWithoutM" returneaza damage-ul total rezultat din ambele 
 abilitati fara amplificatori de rasa.
 
+
+-----ETAPA 2-----
+    Pentru adaptarea codului la cerintele etapei a doua am adaugat schimbat un pic 
+codul din prima etapa adaugand un Factory pentru ingeri.
+    Etapa a doua a cuprins familiarizarea cu 2 noi design pattern-uri: Strategy si
+Observer si implementarea unui Visitor pentru interactiunea ingeri-eroi.
+    Astfel, pentru a implementa Strategy, am adaugat 2 clase, "FirstStrategy" si 
+"SecondStrategy", si o interfata , Strategt,  in package-ul "hero" si o metoda noua
+in clasa "Hero". Cele 2 clase calculeaza noile caracteristiti optinute in urma
+modificarilor dupa alegerea unei strategii, iar prin metoda din clasa Hero 
+se alege strategia potrivita in functie de conditiile date in enunt.
+    Pentru a implementa Observer, am creat un package nou, "wizard" in care am 7 
+clase: TheGreatWizard, WizardSubject, ObserveAngelAction, ObserveAppearence, 
+ObserveKilled, ObserveKilledByAngel, ObserveLevelChange. 
+    Clasa abstracta TheGreatWizard observa schimbarile aduse personajelor prin
+suprascrierea metodei "update" in fiecare clasa de tip Observe.
+    Clasa ObserveAngelAction, printeaza ori de cate ori un inger ajuta sau 
+loveste un erou, ObserveAppearence printeaza locul in care apare ingerul.
+ObserveKilled printeaza daca un erou a omorat alt erou, ObserveKilledByAngel
+printeaza daca un inger a omorat un erou si ObserveLevelChange printeaza  daca
+eroul avanseaza in nivel.
+    Clasa WizardSubject contine obiectele observate cat si setter-ii necesari
+acestora, o metoda "attach" pentru a adauga un observer in lista de observers
+si o metoda "notifyAllObservers" pentru apelul metodei "update".
+    Pentru a implementa Visitorul am adaugat o metoda abstracta in clasa Hero,
+"acceptAngel" ce are ca argument un inger si o meroda abstracta in clasa Angel,
+"actionOn" ce are ca argument un erou.
+    Pentru a implementa ingerii am creat cate o clasa separat pentru fiecare,
+clasele mostenind clasa abstracta Angel.
 

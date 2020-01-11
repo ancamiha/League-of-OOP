@@ -14,6 +14,14 @@ public final class AngelsFactory {
         return instance;
     }
 
+    /**
+     * Metada ce creeaza ingerii.
+     * @param round runda in care actioneaza
+     * @param angels lista de ingeri
+     * @param angel tipul ingerului ce trebuie creat
+     * @param xPos coordonata x de pe harta
+     * @param yPos coordonata y de pe harta
+     */
     public void createAngels(final int round, final List<Angels> angels, final String angel,
                              final int xPos, final int yPos) {
         switch (angel) {

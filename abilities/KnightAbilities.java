@@ -77,10 +77,10 @@ public class KnightAbilities extends Abilities {
         int damage;
         if ((hero.getField()).equals(TypeOfField.Land)) {
             damage = Math.round((baseDamage + hero.getLevel() * levelDamage) * landAmplifKnight);
-            enemy.overTimeAbilities(0, 0, false, 1);
+            enemy.overTimeAbilities(1, 0, true, 1);
         } else {
             damage = Math.round(baseDamage + hero.getLevel() * levelDamage);
-            enemy.overTimeAbilities(0, 0, false, 1);
+            enemy.overTimeAbilities(1, 0, true, 1);
         }
         return damage;
     }

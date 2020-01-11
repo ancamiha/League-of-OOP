@@ -43,7 +43,7 @@ public abstract class Angels {
     }
 
     /**
-     * Implement Visitor pattern angels-hero.
+     * Implementare design pattern-ul Visitor pentru eroi-ingeri.
      */
     public abstract void actionOn(Hero hero);
 }

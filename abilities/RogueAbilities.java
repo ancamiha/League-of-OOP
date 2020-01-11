@@ -77,11 +77,12 @@ public class RogueAbilities extends Abilities {
         if ((hero.getField()).equals(TypeOfField.Woods)) {
             damage = Math.round((baseDamage + hero.getLevel() * levelDamage) * landAmplifRogue);
             enemy.overTimeAbilities(timeOnWoods, Math.round(damage
-                                   * getRaceModifierSecond(enemy, hero.getBonus())), true, 1);
+                                   * getRaceModifierSecond(enemy, hero.getBonus())),
+                                    true, timeOnWoods);
         } else {
             damage = Math.round(baseDamage + hero.getLevel() * levelDamage);
             enemy.overTimeAbilities(time, Math.round(damage
-                                   * getRaceModifierSecond(enemy, hero.getBonus())), true, 1);
+                                   * getRaceModifierSecond(enemy, hero.getBonus())), true, time);
         }
         return damage;
     }

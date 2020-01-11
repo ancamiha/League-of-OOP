@@ -24,10 +24,13 @@ public abstract class Hero {
     //pentru Observer
     private boolean hasAppeared;
     private boolean wasHit;
+    private boolean wasHK;
     private boolean reachedLv;
     private float bonus;
     private boolean killedByAngel;
     private int oldLvl;
+    private boolean saved;
+    private boolean helped;
 
     public Hero(final int id, final HeroType type, final int posX, final int posY) {
         this.id = id;
@@ -46,8 +49,11 @@ public abstract class Hero {
         this.killedByAngel = false;
         this.hasAppeared = false;
         this.wasHit = false;
+        this.wasHK = false;
         this.reachedLv = false;
         this.oldLvl = 0;
+        this.saved = false;
+        this.helped = false;
     }
 
     /**
@@ -97,11 +103,20 @@ public abstract class Hero {
     public final boolean isWasHit() {
         return wasHit;
     }
+    public final boolean isWasHK() {
+        return wasHK;
+    }
     public final boolean isReachedLv() {
         return reachedLv;
     }
     public final int getOldLvl() {
         return oldLvl;
+    }
+    public final boolean isSaved() {
+        return saved;
+    }
+    public final boolean isHelped() {
+        return helped;
     }
 
     public final void setField(final TypeOfField currentField) {
@@ -125,6 +140,9 @@ public abstract class Hero {
     public final void setHasAppeared(final boolean hasAppeared) {
         this.hasAppeared = hasAppeared;
     }
+    public final void setWasHK(final boolean wasHK) {
+        this.wasHK = wasHK;
+    }
     public final void setWasHit(final boolean wasHit) {
         this.wasHit = wasHit;
     }
@@ -133,6 +151,12 @@ public abstract class Hero {
     }
     public final void setOldLvl(final int oldLvl) {
         this.oldLvl = oldLvl;
+    }
+    public final void setSaved(final boolean saved) {
+        this.saved = saved;
+    }
+    public final void setHelped(final boolean helped) {
+        this.helped = helped;
     }
 
     public final void updatePosX(final int newX) {
@@ -211,9 +235,7 @@ public abstract class Hero {
                     this.updatePosY(0);
             }
         } else {
-            if (this.getDontMove() == 1) {
-                this.updateDontMove();
-            }
+            this.updateDontMove();
         }
     }
 
@@ -313,13 +335,13 @@ public abstract class Hero {
     }
 
     /**
-     * Implement Visitor pattern.
+     * Implementare design pattern-ul Visitor pentru lupta dintre eroi.
      */
     public abstract void accept(Hero hero);
     public abstract void interactWith(Hero enemy);
 
     /**
-     * Implement Visitor pattern angels-heroes.
+     * Implementare design pattern-ul Visitor pentru eroi-ingeri.
      */
     public abstract void acceptAngel(Angels angel);
 }

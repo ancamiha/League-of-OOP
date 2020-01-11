@@ -41,7 +41,7 @@ public class WizardAbilities extends Abilities {
             case Pyromancer:
                 return pyromancerModifier + bonus;
             case Wizard:
-                return wizardModifier + bonus;
+                return wizardModifier;
             default:
                 return 0;
         }

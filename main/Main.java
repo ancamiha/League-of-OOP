@@ -7,11 +7,12 @@ import heroes.HeroType;
 import heroes.PrintResult;
 import map.Map;
 import map.TypeOfField;
-import wizard.WizardSubject;
 import wizard.ObserveKilled;
+import wizard.ObserveKilledByAngel;
+import wizard.ObserveAngelAction;
 import wizard.ObserveLevelChange;
 import wizard.ObserveAppearance;
-import wizard.ObserveAngelAction;
+import wizard.WizardSubject;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
@@ -30,14 +31,14 @@ public final class Main {
 
         List<Hero> heroes = gameInput.getHeroes();
         List<Angels> angels = gameInput.getAngels();
-
         try {
             System.setOut(new PrintStream(args[1]));
             for (int i = 0; i < gameInput.getRounds(); i++) {
                 WizardSubject subject = new WizardSubject();
+                new ObserveKilled(subject);
                 new ObserveAppearance(subject);
                 new ObserveAngelAction(subject);
-                new ObserveKilled(subject);
+                new ObserveKilledByAngel(subject);
                 new ObserveLevelChange(subject);
                 //
                 System.out.println("~~ Round " + (i + 1) + " ~~");
@@ -51,17 +52,17 @@ public final class Main {
                     Hero hero = heroes.get(j);
                     if (hero.getStillApply()) {
                         hero.updateHp(hero.getDamage());
-                        hero.updateTime();
-                        if (hero.getTime() == 0) {
+                        if (hero.getTime() == 0 || hero.getDontMove() == 0) {
                             hero.updateStillApply();
                         }
+                        hero.updateTime();
                     }
                     hero.moveHero(gameInput.getrDescription().get(i).charAt(j));
                     hero.setField(Map.getFieldType(map, hero.getPosX(), hero.getPosY()));
                 }
                 //sunt aplicate strategiile corespunzatoare
                 for (Hero hero : heroes) {
-                    if (hero.getStillApply()) {
+                    if (!hero.getStillApply() && hero.getDontMove() == 0) {
                         hero.chooseStrategy();
                     }
                 }
@@ -83,12 +84,12 @@ public final class Main {
                                 (hero2).accept(hero1);
                             }
 
-                            if (!hero2.isNotDead()) {
+                            if (!hero2.isNotDead() && !hero2.isKilledByAngel()) {
                                 hero2.setDead(true);
                                 hero2.setKilledByAngel(false);
                                 hero1.increaseXP(hero2);
                             }
-                            if (!hero1.isNotDead()) {
+                            if (!hero1.isNotDead() && !hero2.isKilledByAngel()) {
                                 hero1.setDead(true);
                                 hero1.setKilledByAngel(false);
                                 hero2.increaseXP(hero1);
@@ -120,48 +121,45 @@ public final class Main {
                                     && hero.getPosY() == angel.getPosY()
                                     && !hero.isDead()) {
                                 hero.acceptAngel(angel);
+                                if (hero.getHp() <= 0) {
+                                    hero.setDead(true);
+                                }
                             }
                             if (hero.getPosX() == angel.getPosX()
                                     && hero.getPosY() == angel.getPosY() && hero.isDead()
-                                    && (angel.getType()).equals(AngelType.TheDoomer)) {
+                                    && (angel.getType()).equals(AngelType.Spawner)) {
                                 hero.acceptAngel(angel);
+                                if (hero.getHp() > 0) {
+                                    hero.setDead(false);
+                                }
                             }
                         }
                     }
                     if (angel.getActionRound() == i) {
                         //Marele Magician observa activitatea eroilor si a ingerilor din joc
-                        for (int j = 0; j < heroes.size(); j++) {
-                            Hero hero1 = heroes.get(j);
-                            subject.setAngel(angel);
-                            subject.setHero1(hero1);
-                            for (int k = j + 1; k < heroes.size(); k++) {
-                                Hero hero2 = heroes.get(k);
-                                if (hero1.getPosX() == hero2.getPosX()
-                                        && hero1.getPosY() == hero2.getPosY()) {
-                                    subject.setHero2(hero2);
-                                }
-                            }
-                            subject.notifyAllObservers();
-                        }
+                        subject.setAngel(angel);
                     } else {
                         /*Daca pe tura curenta nu exista ingeri, Marele
                         Magician observa doar activitatea eroilor*/
-                        for (int j = 0; j < heroes.size(); j++) {
-                            Hero hero1 = heroes.get(j);
-                            subject.setAngel(null);
-                            subject.setHero1(hero1);
-                            for (int k = j + 1; k < heroes.size(); k++) {
-                                Hero hero2 = heroes.get(k);
-                                if (hero1.getPosX() == hero2.getPosX()
-                                        && hero1.getPosY() == hero2.getPosY()) {
-                                    subject.setHero2(hero2);
-                                }
+                        subject.setAngel(null);
+                    }
+                    for (int j = 0; j < heroes.size(); j++) {
+                        Hero hero1 = heroes.get(j);
+                        subject.setHero1(hero1);
+                        for (int k = j + 1; k < heroes.size(); k++) {
+                            Hero hero2 = heroes.get(k);
+                            if (hero1.getPosX() == hero2.getPosX()
+                                    && hero1.getPosY() == hero2.getPosY()) {
+                                subject.setHero2(hero2);
                             }
-                            subject.notifyAllObservers();
                         }
+                        subject.notifyAllObservers();
+                    }
+
+                    for (Hero hero : heroes) {
+                        hero.setHelped(false);
                     }
                 }
-                //PrintResult.printR(heroes);
                 System.out.println();
             }
         System.out.println("~~ Results ~~");
@@ -171,4 +169,3 @@ public final class Main {
         }
     }
 }
-
